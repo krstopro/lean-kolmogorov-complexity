@@ -11,7 +11,6 @@ namespace KolmogorovComplexity
 open Part Set
 
 variable {S : Type*}
-variable {y : S}
 variable [Primcodable S]
 
 def l (n : ℕ) : ℕ := Nat.log2 (n + 1)
@@ -35,5 +34,19 @@ def additively_optimal (f : ℕ →. ℕ) (C : Set (ℕ →. ℕ)) : Prop :=
 /-- There is an additively optimal universal partial computable function. -/
 lemma lem_2_1_1 : ∃ f : ℕ →. ℕ, Partrec f ∧ additively_optimal (S := S) f { g : ℕ →. ℕ | Partrec g } := by
   sorry
+
+def description (f : ℕ →. ℕ) (x y: S) (p : ℕ ) : Prop :=
+  Partrec f ∧ f (Nat.pair (Encodable.encode y) p) = Encodable.encode x
+
+noncomputable def description_complexity (f: ℕ →. ℕ) (x y : S) :=
+  sInf ((fun p => (l p : WithTop ℕ)) '' { p | Encodable.encode x ∈ f (Nat.pair (Encodable.encode y) p) })
+
+def φ₀ : ℕ →. ℕ := sorry
+
+noncomputable def conditional_complexity (x y : S) :=
+  description_complexity φ₀ x y
+
+noncomputable def unconditional_complexity (x : S) :=
+  conditional_complexity x (Encodable.decode 0 : S)
 
 end KolmogorovComplexity
