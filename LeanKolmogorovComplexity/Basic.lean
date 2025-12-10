@@ -24,12 +24,10 @@ noncomputable def complexity (f: ℕ →. ℕ) (x : S) :=
   sInf ((fun p => (l p : WithTop ℕ)) '' { p | Encodable.encode x ∈ f p })
 
 def minorizes (f g : ℕ →. ℕ) : Prop :=
-  ∃ c : ℕ, ∀ x : S, complexity f x = complexity g x + c
+  ∃ c : ℕ, ∀ x : S, complexity f x ≤ complexity g x + c
 
 def equivalent (f g : ℕ →. ℕ) : Prop :=
   minorizes (S := S) f g ∧ minorizes (S := S) g f
-
-#print minorizes
 
 def additively_optimal (f : ℕ →. ℕ) (C : Set (ℕ →. ℕ)) : Prop :=
   ∀ g ∈ C, minorizes (S := S) f g
