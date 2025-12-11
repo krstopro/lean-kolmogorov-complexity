@@ -32,7 +32,6 @@ def equivalent (f g : ℕ →. ℕ) : Prop :=
 omit [Denumerable S] in
 lemma minorizes_trans (f g h : ℕ →. ℕ) (h_fg : minorizes (S := S) f g) (h_gh : minorizes (S := S) g h)
     : minorizes (S := S) f h := by
-  unfold minorizes at *
   obtain ⟨c_fg, h_fg_⟩ := h_fg
   obtain ⟨c_gh, h_gh_⟩ := h_gh
   use c_fg + c_gh
