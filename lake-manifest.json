@@ -5,7 +5,7 @@
    "type": "git",
    "subDir": null,
    "scope": "leanprover-community",
-   "rev": "3fc589851dc9141b61a528b088c746f89028d66d",
+   "rev": "053b764afadf7836ec8680b9e53eea46776749c4",
    "name": "mathlib",
    "manifestFile": "lake-manifest.json",
    "inputRev": "master",
@@ -91,5 +91,5 @@
    "inputRev": "v4.26.0-rc2",
    "inherited": true,
    "configFile": "lakefile.toml"}],
- "name": "«lean-kolmogorov-complexity»",
+ "name": "«kolmogorov-complexity»",
  "lakeDir": ".lake"}
