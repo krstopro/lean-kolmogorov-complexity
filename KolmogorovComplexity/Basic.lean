@@ -40,8 +40,8 @@ lemma minorizes_trans (f g h : ℕ →. ℕ) (h_fg : minorizes (S := S) f g) (h_
   calc complexity f x
       ≤ complexity g x + c_fg := h_fg_ x
     _ ≤ (complexity h x + c_gh) + c_fg := by
-        gcongr
-        exact h_gh_ x
+        rw [add_comm (complexity g x), add_comm (complexity h x + c_gh)]
+        exact add_le_add_right (h_gh_ x) c_fg
     _ = complexity h x + (c_gh + c_fg) := by rw [add_assoc]
     _ = complexity h x + (c_fg + c_gh) := by congr 1; ring
 
