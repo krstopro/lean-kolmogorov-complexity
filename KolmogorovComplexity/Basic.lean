@@ -34,7 +34,28 @@ def additively_optimal (f : ℕ →. ℕ) (C : Set (ℕ →. ℕ)) : Prop :=
 
 /-- There is an additively optimal universal partial computable function. -/
 lemma lem_2_1_1 : ∃ f : ℕ →. ℕ, Partrec f ∧ additively_optimal (S := S) f { g : ℕ →. ℕ | Partrec g } := by
-  sorry
+  use
+    let code_left := Nat.Partrec.Code.comp Nat.Partrec.Code.left Nat.Partrec.Code.id
+    let code_right := Nat.Partrec.Code.comp Nat.Partrec.Code.right Nat.Partrec.Code.id
+    let code := Nat.Partrec.Code.pair code_left code_right
+    Nat.Partrec.Code.eval code
+  constructor
+  · simp
+    constructor
+    refine Nat.Partrec.pair ?_ ?_
+    · apply Nat.Partrec.Code.exists_code.mpr
+      use Nat.Partrec.Code.left.comp Nat.Partrec.Code.id
+    · apply Nat.Partrec.Code.exists_code.mpr
+      use (Nat.Partrec.Code.right.comp Nat.Partrec.Code.id)
+    · apply Nat.Partrec.Code.exists_code.mpr
+      simp
+      use Nat.Partrec.Code.id
+      funext n
+      exact Nat.Partrec.Code.eval_id n
+  · unfold additively_optimal
+    intro g g_mem
+    unfold minorizes
+    sorry
 
 def description (φ : ℕ →. ℕ) (x y: S) (p : ℕ ) : Prop :=
   Partrec φ ∧ φ (Nat.pair (encode y) p) = encode x
