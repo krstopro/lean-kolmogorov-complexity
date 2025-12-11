@@ -1,4 +1,5 @@
 import Mathlib.Computability.Partrec
+import Mathlib.Computability.PartrecCode
 import Mathlib.Data.Nat.Basic
 import Mathlib.Data.Part
 import Mathlib.Data.PFun
@@ -69,16 +70,14 @@ def description_minorizes (φ γ : ℕ →. ℕ) : Prop :=
 def description_additively_optimal (φ₀ : ℕ →. ℕ) (C : Set (ℕ →. ℕ)) : Prop :=
   ∀ φ ∈ C, description_minorizes (S := S) φ₀ φ
 
-def description_additively_optimal_class :=
-  {φ | Partrec φ ∧ description_additively_optimal (S:= S) φ {γ : ℕ →. ℕ | Partrec γ}}
-
 theorem the_2_1_1 : ∃ φ₀ : ℕ →. ℕ, Partrec φ₀ ∧ description_additively_optimal (S:= S) φ₀ {φ : ℕ →. ℕ | Partrec φ} :=
   sorry
 
-def φ₀ : ℕ →. ℕ := sorry
+noncomputable def φ₀ :=
+  Classical.choose (the_2_1_1 (S:=S))
 
 noncomputable def conditional_complexity (x y : S) :=
-  description_complexity φ₀ x y
+  description_complexity (φ₀ (S := S)) x y
 
 noncomputable def unconditional_complexity (x : S) := by
   choose ε _ _ using Denumerable.decode_inv (α := S) 0
