@@ -8,7 +8,7 @@ import Mathlib.Tactic
 
 namespace KolmogorovComplexity
 
-open Part Set
+open Part Set Encodable
 
 variable {S : Type*}
 variable [Primcodable S]
@@ -21,7 +21,7 @@ def l (n : ℕ) : ℕ := Nat.log2 (n + 1)
   Cf(x) = min { l(p) : f(p) = n(x) }
 -/
 noncomputable def complexity (f: ℕ →. ℕ) (x : S) :=
-  sInf ((fun p => (l p : WithTop ℕ)) '' { p | Encodable.encode x ∈ f p })
+  sInf ((fun p => (l p : WithTop ℕ)) '' { p | encode x ∈ f p })
 
 def minorizes (f g : ℕ →. ℕ) : Prop :=
   ∃ c : ℕ, ∀ x : S, complexity f x ≤ complexity g x + c
@@ -36,11 +36,23 @@ def additively_optimal (f : ℕ →. ℕ) (C : Set (ℕ →. ℕ)) : Prop :=
 lemma lem_2_1_1 : ∃ f : ℕ →. ℕ, Partrec f ∧ additively_optimal (S := S) f { g : ℕ →. ℕ | Partrec g } := by
   sorry
 
-def description (f : ℕ →. ℕ) (x y: S) (p : ℕ ) : Prop :=
-  Partrec f ∧ f (Nat.pair (Encodable.encode y) p) = Encodable.encode x
+def description (φ : ℕ →. ℕ) (x y: S) (p : ℕ ) : Prop :=
+  Partrec φ ∧ φ (Nat.pair (encode y) p) = encode x
 
-noncomputable def description_complexity (f: ℕ →. ℕ) (x y : S) :=
-  sInf ((fun p => (l p : WithTop ℕ)) '' { p | Encodable.encode x ∈ f (Nat.pair (Encodable.encode y) p) })
+noncomputable def description_complexity (φ: ℕ →. ℕ) (x y : S) :=
+  sInf ((fun p => (l p : WithTop ℕ)) '' { p | description φ x y p })
+
+def description_minorizes (φ γ : ℕ →. ℕ) : Prop :=
+  ∃ χ : ℕ, ∀ x y : S, description_complexity φ x y ≤ description_complexity γ x y + χ
+
+def description_additively_optimal (φ₀ : ℕ →. ℕ) (C : Set (ℕ →. ℕ)) : Prop :=
+  ∀ φ ∈ C, description_minorizes (S := S) φ₀ φ
+
+def description_additively_optimal_class :=
+  {φ | Partrec φ ∧ description_additively_optimal (S:= S) φ {γ : ℕ →. ℕ | Partrec γ}}
+
+theorem the_2_1_1 : ∃ φ₀ : ℕ →. ℕ, Partrec φ₀ ∧ description_additively_optimal (S:= S) φ₀ {φ : ℕ →. ℕ | Partrec φ} :=
+  sorry
 
 def φ₀ : ℕ →. ℕ := sorry
 
