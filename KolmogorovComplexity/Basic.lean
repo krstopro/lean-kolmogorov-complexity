@@ -26,9 +26,6 @@ noncomputable def complexity (f: ℕ →. ℕ) (x : S) :=
 def minorizes (f g : ℕ →. ℕ) : Prop :=
   ∃ c : ℕ, ∀ x : S, complexity f x ≤ complexity g x + c
 
-def equivalent (f g : ℕ →. ℕ) : Prop :=
-  minorizes (S := S) f g ∧ minorizes (S := S) g f
-
 omit [Denumerable S] in
 lemma minorizes_trans (f g h : ℕ →. ℕ) (h_fg : minorizes (S := S) f g) (h_gh : minorizes (S := S) g h)
     : minorizes (S := S) f h := by
@@ -44,25 +41,8 @@ lemma minorizes_trans (f g h : ℕ →. ℕ) (h_fg : minorizes (S := S) f g) (h_
     _ = complexity h x + (c_gh + c_fg) := by rw [add_assoc]
     _ = complexity h x + (c_fg + c_gh) := by congr 1; ring
 
-omit [Denumerable S] in
-theorem equivalent_refl : Reflexive (equivalent (S := S)) := by
-  intro f
-  constructor <;> (use 0; norm_num)
-
-omit [Denumerable S] in
-theorem equivalent_symm : Symmetric (equivalent (S := S)) := by
-  intro f g ⟨h1, h2⟩
-  exact ⟨h2, h1⟩
-
-omit [Denumerable S] in
-theorem equivalent_trans : Transitive (equivalent (S := S)) := by
-  intro f g h ⟨h_fg, h_gf⟩ ⟨h_gh, h_hg⟩
-  exact ⟨minorizes_trans f g h h_fg h_gh, minorizes_trans h g f h_hg h_gf⟩
-
-instance : Equivalence (equivalent (S := S)) where
-  refl := equivalent_refl
-  symm := fun {_ _} h => equivalent_symm h
-  trans := fun {_ _ _} hxy hyz => equivalent_trans hxy hyz
+def equivalent (f g : ℕ →. ℕ) : Prop :=
+  minorizes (S := S) f g ∧ minorizes (S := S) g f
 
 def additively_optimal (f : ℕ →. ℕ) (C : Set (ℕ →. ℕ)) : Prop :=
   ∀ g ∈ C, minorizes (S := S) f g
