@@ -12,6 +12,7 @@ open Part Set
 
 variable {S : Type*}
 variable [Primcodable S]
+variable [Denumerable S]
 
 def l (n : ℕ) : ℕ := Nat.log2 (n + 1)
 
@@ -46,7 +47,8 @@ def φ₀ : ℕ →. ℕ := sorry
 noncomputable def conditional_complexity (x y : S) :=
   description_complexity φ₀ x y
 
-noncomputable def unconditional_complexity (x : S) :=
-  conditional_complexity x (Encodable.decode 0 : S)
+noncomputable def unconditional_complexity (x : S) := by
+  choose ε _ _ using Denumerable.decode_inv (α := S) 0
+  exact conditional_complexity x ε
 
 end KolmogorovComplexity
